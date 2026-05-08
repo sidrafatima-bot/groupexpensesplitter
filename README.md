@@ -1,4 +1,4 @@
-# groupexpensesplitter
+# equapay
 EPL Project
 <br>
 -CodeWarriors.
