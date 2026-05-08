@@ -4,9 +4,6 @@ EPL Project
 -CodeWarriors.
 <br>
 Author - Sidra Fatima
-<br>
-       - Umme Hafsa
-<br>         
-       - Sania Noorin
-<br>         
-       - Disha Vyas 
+- Umme Hafsa <br>
+- Sania Noorin <br>
+- Disha Vyas
