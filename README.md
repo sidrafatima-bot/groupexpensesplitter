@@ -2,4 +2,4 @@
 EPL Project
 <br>
 -CodeWarriors.  
-disha, sania, sidra, hafsa
+disha, sani
