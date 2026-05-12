@@ -72,16 +72,14 @@
     <div class="page" id="apartment">
         <div class="header row-header">
             <div onclick="showPage('dashboard')" class="back-arrow">←</div>
-            <h3>Apartment rent</h3>
+            <h3 id="groupTitle">Group</h3>
         </div>
-        <div class="chart-container">
+        <div class="chart-container" id="chartMembers">
             <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sidra</strong></div>
             <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sania</strong></div>
             <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Hafsa</strong></div>
         </div>
-        <div class="expense-card"><span>Sidra</span> <span class="green" id="res1">owed 14k</span></div>
-        <div class="expense-card"><span>Sania</span> <span class="red" id="res2">owe 7k</span></div>
-        <div class="expense-card"><span>Hafsa</span> <span class="red" id="res3">owe 7k</span></div>
+        <div id="resultContainer"></div>
         <button class="fab" onclick="showPage('addExpense')">+</button>
     </div>
 
@@ -126,36 +124,124 @@
         o.style.display = s.classList.contains('open') ? 'block' : 'none';
     }
 
-    function addNewGroup() {
-        const val = document.getElementById('groupInput').value;
-        const members = document.getElementById('groupMembers').value || "1 member";
-        
-        if(val) {
-            const list = document.getElementById('groupList');
-            list.innerHTML += `<div class="expense-card" onclick="showPage('apartment')">
-                <div><strong>${val}</strong><br><small>${members}</small></div>
-                <b class="green">₹0</b>
-            </div>`;
-            
-            // Clear inputs
-            document.getElementById('groupInput').value = "";
-            document.getElementById('groupMembers').value = "";
-            document.getElementById('groupDesc').value = "";
-            
-            showPage('dashboard');
-        }
+    let currentGroup = null;
+
+function addNewGroup() {
+
+    const groupName = document.getElementById('groupInput').value;
+    const membersInput = document.getElementById('groupMembers').value;
+
+    if (!groupName || !membersInput) {
+        alert("Please enter group name and members");
+        return;
     }
 
+    const membersArray = membersInput.split(',');
+
+    const list = document.getElementById('groupList');
+
+    const groupData = {
+        name: groupName,
+        members: membersArray
+    };
+
+    list.innerHTML += `
+        <div class="expense-card"
+            onclick='openGroup(${JSON.stringify(groupData)})'>
+
+            <div>
+                <strong>${groupName}</strong><br>
+                <small>${membersArray.length} members</small>
+            </div>
+
+            <b class="green">₹0</b>
+        </div>
+    `;
+
+    document.getElementById('groupInput').value = "";
+    document.getElementById('groupMembers').value = "";
+    document.getElementById('groupDesc').value = "";
+
+    showPage('dashboard');
+}
+function openGroup(group) {
+
+    currentGroup = group;
+
+    document.getElementById('groupTitle').innerText = group.name;
+
+    const chart = document.getElementById('chartMembers');
+
+    chart.innerHTML = "";
+
+    group.members.forEach(member => {
+
+        chart.innerHTML += `
+            <div class="bar-wrapper">
+                <div class="bar" style="height:100px;">
+                    <span>0</span>
+                </div>
+
+                <strong>${member.trim()}</strong>
+            </div>
+        `;
+    });
+
+    const resultBox = document.getElementById('resultContainer');
+
+    resultBox.innerHTML = "";
+
+    group.members.forEach(member => {
+
+        resultBox.innerHTML += `
+            <div class="expense-card">
+                <span>${member.trim()}</span>
+                <span class="red">₹0</span>
+            </div>
+        `;
+    });
+
+    showPage('apartment');
+}
+
     function calculateSplit() {
-        const amt = document.getElementById('mainAmount').value;
-        if(amt) {
-            const perPerson = (amt / 3).toFixed(2);
-            document.getElementById('res1').innerText = `owed ${amt}`;
-            document.getElementById('res2').innerText = `owe ${perPerson}`;
-            document.getElementById('res3').innerText = `owe ${perPerson}`;
-            showPage('apartment');
+
+    const amt = document.getElementById('mainAmount').value;
+
+    if (!amt || !currentGroup) return;
+
+    const members = currentGroup.members;
+
+    const perPerson = (amt / members.length).toFixed(2);
+
+    const resultBox = document.getElementById('resultContainer');
+
+    resultBox.innerHTML = "";
+
+    members.forEach((member, index) => {
+
+        if(index === 0) {
+
+            resultBox.innerHTML += `
+                <div class="expense-card">
+                    <span>${member.trim()}</span>
+                    <span class="green">paid ₹${amt}</span>
+                </div>
+            `;
+
+        } else {
+
+            resultBox.innerHTML += `
+                <div class="expense-card">
+                    <span>${member.trim()}</span>
+                    <span class="red">owes ₹${perPerson}</span>
+                </div>
+            `;
         }
-    }
+    });
+
+    showPage('apartment');
+}
 </script>
 </body>
 </html>

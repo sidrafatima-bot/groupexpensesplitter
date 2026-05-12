@@ -1,5 +1,5 @@
 /* --- JAVASCRIPT LOGIC --- */
-
+let currentGroup = null;
 /**
  * Switch between app pages by ID
  * @param {string} pageId - The ID of the div to show
