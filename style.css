@@ -1,0 +1,201 @@
+/* --- CSS STYLES --- */
+body {
+    margin: 0;
+    background: #dff0f2;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.phone {
+    width: 300px;
+    height: 620px;
+    background: #f1fdf4; 
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    border: 8px solid #333;
+}
+
+.page {
+    display: none;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+.page.active {
+    display: block;
+}
+
+/* Sidebar & Overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 98;
+    display: none;
+}
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: -260px;
+    width: 240px;
+    height: 100%;
+    background: white;
+    z-index: 99;
+    transition: 0.3s;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.sidebar.open { left: 0; }
+.active-sidebar-link { color: #2d8cff; font-weight: bold; }
+.float-right { float: right; }
+.logout-link { color: red; font-weight: bold; margin-top: 50px; cursor: pointer; }
+
+/* Welcome Page */
+.circle { position: absolute; border-radius: 50%; background: #d9edf1; z-index: 0; }
+.top { width: 170px; height: 170px; top: -70px; right: -70px; }
+.bottom { width: 140px; height: 140px; bottom: -50px; left: -50px; }
+.welcome-logo { width: 150px; display: block; margin: 60px auto 40px; position: relative; z-index: 1; }
+.welcome-text { text-align: center; position: relative; z-index: 1; }
+.start-btn { width: 180px; margin-top: 40px; }
+
+/* Login Page */
+.login-logo { width: 100px; display: block; margin: 20px auto; }
+.tagline { text-align: center; color: #666; margin-bottom: 30px; }
+.social-text { text-align: center; font-size: 12px; color: #999; margin-top: 20px; }
+.social-container { display: flex; gap: 10px; margin-top: 15px; }
+.social-btn { border: 1px solid #eee; }
+
+/* Dashboard Headers */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.row-header { justify-content: flex-start; gap: 15px; }
+.menu-icon { font-size: 24px; cursor: pointer; color: #555; }
+.dash-logo { width: 80px; }
+.spacer { width: 24px; }
+.back-arrow { cursor: pointer; font-size: 20px; }
+
+.search-bar {
+    width: 100%; padding: 12px 15px; border-radius: 25px;
+    border: none; background: white; margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); outline: none;
+}
+
+.section-title { font-weight: bold; color: #555; margin-bottom: 15px; }
+
+/* Expense Cards */
+.expense-card {
+    background: white; padding: 15px; border-radius: 15px;
+    margin-bottom: 12px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+.member-count { color: #aaa; }
+.green { color: #5b8f67; font-weight: bold; }
+.red { color: #d46b82; font-weight: bold; }
+
+/* Chart Styling */
+.chart-container {
+    background: #f7f0b6; padding: 30px 10px 15px;
+    display: flex; justify-content: space-around;
+    align-items: flex-end; border-radius: 20px;
+    height: 180px; margin-bottom: 25px;
+}
+.bar-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.bar { 
+    width: 40px; background: white; border-radius: 8px; 
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.bar span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: bold; }
+
+/* Forms & Buttons */
+.primary-btn {
+    width: 100%; padding: 15px; border: none; border-radius: 12px;
+    background: #2d8cff; color: white; font-weight: bold;
+    cursor: pointer; margin-top: 10px;
+}
+input, textarea {
+    width: 100%; padding: 14px; border: 1px solid #eee;
+    border-radius: 10px; margin-bottom: 15px; background: white; box-sizing: border-box;
+}
+.input-label { display: block; margin-top: 10px; }
+.amount-section { text-align: center; margin-top: 30px; }
+.amount-input { font-size: 24px; text-align: center; border: none !important; border-bottom: 2px solid #2d8cff !important; border-radius: 0 !important; }
+
+.fab {
+    position: absolute; bottom: 30px; right: 20px;
+    width: 55px; height: 55px; border-radius: 50%;
+    background: #56ccf2; color: white; border: none; font-size: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab { flex: 1; padding: 10px; border: none; border-radius: 20px; background: white; cursor: pointer; }
+.active-tab { background: #ffe8e8; font-weight: bold; }
+#welcome {
+    overflow: hidden; /* This removes the scroll bar from the welcome page */
+}
+/* Social Login */
+.social-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.social-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+}
+.social-text {
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    margin-top: 20px;
+}
+
+/* Sidebar Sectioning */
+.sidebar-section {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+.sidebar-section p {
+    font-size: 13px;
+    margin: 8px 0;
+    color: #555;
+}
+.float-right {
+    float: right;
+    color: #888;
+    font-weight: normal;
+}
+
+/* Split Result Styling */
+.result-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}

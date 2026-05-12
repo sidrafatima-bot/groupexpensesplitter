@@ -1,2 +1,161 @@
-<p>This is a new Repo.
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equapay Full App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone">
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    
+    <div id="sidebar" class="sidebar">
+        <h3>Sidra Fatima</h3>
+        <p class="active-sidebar-link">Settings</p>
+        <p onclick="showPage('addGroup')">Groups</p>
+        <hr>
+        <p>Dark mode</p>
+        <p>Light mode</p>
+        <p>Language</p>
+        <p>Currency <span class="float-right">₹ INR</span></p>
+        <p>Split type <span class="float-right">Equal</span></p>
+        <p>Notifications <span class="float-right">ON</span></p>
+        <p class="logout-link" onclick="showPage('welcome')">Logout</p>
+    </div>
+
+    <div class="page active" id="welcome">
+        <div class="circle top"></div>
+        <div class="circle bottom"></div>
+        <img src="logo.png" class="welcome-logo">
+        <div class="welcome-text">
+            <h1>Hello, User👋</h1>
+            <p>Welcome to Equapay</p>
+            <button class="primary-btn start-btn" onclick="showPage('login')">GET STARTED</button>
+        </div>
+    </div>
+
+    <div class="page" id="login">
+        <img src="logo.png" class="login-logo">
+        <p class="tagline">Manage shared expenses without the stress.</p>
+        <div class="tabs">
+            <button class="tab active-tab">Sign In</button>
+            <button class="tab">Sign Up</button>
+        </div>
+        <input type="text" placeholder="Email or Phone Number">
+        <input type="password" placeholder="Password">
+        <button class="primary-btn" onclick="showPage('dashboard')">Sign In</button>
+        <p class="social-text" style="text-align:center; font-size:12px; margin-top:15px; color:#999;">OR CONTINUE WITH</p>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="tab" style="flex:1; border:1px solid #eee; padding:10px; border-radius:15px;">Google</button>
+            <button class="tab" style="flex:1; border:1px solid #eee; padding:10px; border-radius:15px;">Apple</button>
+        </div>
+    </div>
+
+    <div class="page" id="dashboard">
+        <div class="header">
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <img src="logo.png" class="dash-logo">
+        </div>
+        <input type="text" class="search-bar" placeholder="Search groups...">
+        <p class="section-title">Your Groups</p>
+        <div id="groupList">
+            <div class="expense-card" onclick="showPage('apartment')">
+                <div><strong>Apartment Rent</strong><br><small>3 members</small></div>
+                <b class="red">₹4500</b>
+            </div>
+        </div>
+        <button class="fab" onclick="showPage('addGroup')">+</button>
+    </div>
+
+    <div class="page" id="apartment">
+        <div class="header row-header">
+            <div onclick="showPage('dashboard')" class="back-arrow">←</div>
+            <h3>Apartment rent</h3>
+        </div>
+        <div class="chart-container">
+            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sidra</strong></div>
+            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sania</strong></div>
+            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Hafsa</strong></div>
+        </div>
+        <div class="expense-card"><span>Sidra</span> <span class="green" id="res1">owed 14k</span></div>
+        <div class="expense-card"><span>Sania</span> <span class="red" id="res2">owe 7k</span></div>
+        <div class="expense-card"><span>Hafsa</span> <span class="red" id="res3">owe 7k</span></div>
+        <button class="fab" onclick="showPage('addExpense')">+</button>
+    </div>
+
+    <div class="page" id="addExpense">
+        <div class="header"><div onclick="showPage('apartment')" class="back-arrow">←</div><h3>Add Expense</h3></div>
+        <label class="input-label">Item Name:</label>
+        <input type="text" id="expName" placeholder="e.g. Electricity">
+        <div class="amount-section">
+            <p>Amount</p>
+            <input type="number" id="mainAmount" placeholder="₹ 0.00" class="amount-input">
+        </div>
+        <button class="primary-btn" onclick="calculateSplit()">Confirm Split</button>
+    </div>
+
+    <div class="page" id="addGroup">
+        <div class="header"><div onclick="showPage('dashboard')" class="back-arrow">←</div><h3>New Group</h3></div>
+        
+        <label class="input-label">Group Name:</label>
+        <input type="text" id="groupInput" placeholder="e.g., Weekend Trip">
+        
+        <label class="input-label">Group Members:</label>
+        <input type="text" id="groupMembers" placeholder="Add names (e.g. Sidra, Sania)">
+        
+        <label class="input-label">Description (optional):</label>
+        <input type="text" id="groupDesc" placeholder="What is this group for?">
+        
+        <button class="primary-btn" onclick="addNewGroup()">Create Group</button>
+    </div>
+</div>
+
+<script>
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if (document.getElementById('sidebar').classList.contains('open')) toggleMenu();
+    }
+
+    function toggleMenu() {
+        const s = document.getElementById('sidebar');
+        const o = document.getElementById('overlay');
+        s.classList.toggle('open');
+        o.style.display = s.classList.contains('open') ? 'block' : 'none';
+    }
+
+    function addNewGroup() {
+        const val = document.getElementById('groupInput').value;
+        const members = document.getElementById('groupMembers').value || "1 member";
+        
+        if(val) {
+            const list = document.getElementById('groupList');
+            list.innerHTML += `<div class="expense-card" onclick="showPage('apartment')">
+                <div><strong>${val}</strong><br><small>${members}</small></div>
+                <b class="green">₹0</b>
+            </div>`;
+            
+            // Clear inputs
+            document.getElementById('groupInput').value = "";
+            document.getElementById('groupMembers').value = "";
+            document.getElementById('groupDesc').value = "";
+            
+            showPage('dashboard');
+        }
+    }
+
+    function calculateSplit() {
+        const amt = document.getElementById('mainAmount').value;
+        if(amt) {
+            const perPerson = (amt / 3).toFixed(2);
+            document.getElementById('res1').innerText = `owed ${amt}`;
+            document.getElementById('res2').innerText = `owe ${perPerson}`;
+            document.getElementById('res3').innerText = `owe ${perPerson}`;
+            showPage('apartment');
+        }
+    }
+</script>
+</body>
+</html>
