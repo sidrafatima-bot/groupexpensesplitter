@@ -11,14 +11,16 @@ body {
 }
 
 .phone {
-    width: 300px;
-    height: 620px;
+    width: 320px;
+    height: 650px;
     background: #f1fdf4; 
     border-radius: 40px;
     overflow: hidden;
     position: relative;
     box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-    border: 8px solid #333;
+    border: 8px solid #2c3140;
+    position: relative;
+    margin: auto;
 }
 
 .page {
@@ -31,6 +33,7 @@ body {
     top: 0;
     left: 0;
     overflow-y: auto;
+    padding-bottom: 100px;
 }
 
 .page.active {
@@ -115,14 +118,28 @@ body {
     display: flex; justify-content: space-around;
     align-items: flex-end; border-radius: 20px;
     height: 180px; margin-bottom: 25px;
+    overflow-x: auto;
 }
-.bar-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.bar-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 55px; }
+.bar-wrapper strong { font-size: 12px; margin-top: 6px;
+ }
 .bar { 
-    width: 40px; background: white; border-radius: 8px; 
+    width: 32px; background: white; border-radius: 8px; 
     display: flex; justify-content: center; align-items: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+    max-height: 120px;
+    min-height: 20px;
+    transition: height 0.4s ease;
 }
-.bar span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: bold; }
+.bar span {
+    writing-mode: horizontal-tb;
+    transform: rotate(0deg);
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px;
+}
 
 /* Forms & Buttons */
 .primary-btn {
@@ -138,11 +155,22 @@ input, textarea {
 .amount-section { text-align: center; margin-top: 30px; }
 .amount-input { font-size: 24px; text-align: center; border: none !important; border-bottom: 2px solid #2d8cff !important; border-radius: 0 !important; }
 
-.fab {
-    position: absolute; bottom: 30px; right: 20px;
-    width: 55px; height: 55px; border-radius: 50%;
-    background: #56ccf2; color: white; border: none; font-size: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer;
+.fab{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+
+    border: none;
+    background: #2d8cff;
+    color: white;
+    font-size: 32px;
+
+    z-index: 100;
+    cursor: pointer;
 }
 
 /* Tabs */
@@ -198,4 +226,7 @@ input, textarea {
     border-radius: 15px;
     margin-top: 20px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+#resultContainer{
+    padding-bottom: 90px;
 }

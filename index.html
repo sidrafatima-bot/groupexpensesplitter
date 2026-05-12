@@ -224,7 +224,7 @@ function openGroup(group) {
             resultBox.innerHTML += `
                 <div class="expense-card">
                     <span>${member.trim()}</span>
-                    <span class="green">paid ₹${amt}</span>
+                    <span class="green">paid ₹${Math.round(amt/1000)}k</span>
                 </div>
             `;
 
@@ -233,7 +233,7 @@ function openGroup(group) {
             resultBox.innerHTML += `
                 <div class="expense-card">
                     <span>${member.trim()}</span>
-                    <span class="red">owes ₹${perPerson}</span>
+                    <span class="red">owes ₹${Math.round(perPerson/1000)}k</span>
                 </div>
             `;
         }
@@ -249,10 +249,10 @@ members.forEach((member, index) => {
     }
 
     document.getElementById(`bar${index}`).style.height =
-        (value / 50) + "px";
+        (value / 150) + "px";
 
     document.getElementById(`amount${index}`).innerText =
-        "₹" + value;
+        "₹" + Math.round(value/1000) + "k"
 });
     showPage('apartment');
 }
