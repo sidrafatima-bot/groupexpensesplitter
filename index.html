@@ -174,13 +174,12 @@ function openGroup(group) {
 
     chart.innerHTML = "";
 
-    group.members.forEach(member => {
+    group.members.forEach((member, index) => {
 
         chart.innerHTML += `
-            <div class="bar-wrapper">
-                <div class="bar" style="height:100px;">
-                    <span>0</span>
-                </div>
+            <div class="bar" id="bar${index}" style="height:20px;">
+    <span id="amount${index}">0</span>
+</div>
 
                 <strong>${member.trim()}</strong>
             </div>
@@ -239,7 +238,22 @@ function openGroup(group) {
             `;
         }
     });
+members.forEach((member, index) => {
 
+    let value;
+
+    if(index === 0){
+        value = amt;
+    } else {
+        value = perPerson;
+    }
+
+    document.getElementById(`bar${index}`).style.height =
+        (value / 50) + "px";
+
+    document.getElementById(`amount${index}`).innerText =
+        "₹" + value;
+});
     showPage('apartment');
 }
 </script>
