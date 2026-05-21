@@ -10,21 +10,51 @@
 
 <div class="phone">
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-    
+
+    <!-- SIDEBAR -->
     <div id="sidebar" class="sidebar">
-        <h3>Sidra Fatima</h3>
-        <p class="active-sidebar-link">Settings</p>
-        <p onclick="showPage('addGroup')">Groups</p>
+<h3 id="sidebarName">Sidra Fatima</h3>
+        <p id="sidebarSettings" class="active-sidebar-link">Settings</p>
+        <p id="sidebarGroups" onclick="showPage('dashboard')">Groups</p>
         <hr>
-        <p>Dark mode</p>
-        <p>Light mode</p>
-        <p>Language</p>
-        <p>Currency <span class="float-right">₹ INR</span></p>
-        <p>Split type <span class="float-right">Equal</span></p>
-        <p>Notifications <span class="float-right">ON</span></p>
-        <p class="logout-link" onclick="showPage('welcome')">Logout</p>
+        <p id="sidebarDark" onclick="setTheme('dark')">Dark mode</p>
+        <p id="sidebarLight" onclick="setTheme('light')">Light mode</p>
+        <p id="sidebarLanguage" onclick="showLanguagePicker(true)">Language</p>
+        <div id="languagePicker" class="language-picker">
+            <select id="langSelect" onchange="applyLanguage(this.value)" class="lang-select">
+                <option value="english">🇬🇧 English</option>
+                <option value="hindi">🇮🇳 Hindi</option>
+                <option value="telugu">🇮🇳 Telugu</option>
+                <option value="urdu">🇵 Urdu</option>
+            </select>
+        </div>
+        <div style="margin:8px 0;">
+    <label style="font-size:14px;">Currency</label>
+    <select id="currencySelect" onchange="changeCurrency(this.value)" class="lang-select">
+        <option value="₹">₹ INR</option>
+        <option value="$">$ USD</option>
+        <option value="€">€ EUR</option>
+        <option value="£">£ GBP</option>
+        <option value="¥">¥ JPY</option>
+        <option value="₩">₩ KRW</option>
+        <option value="₺">₺ TRY</option>
+        <option value="﷼">﷼ SAR</option>
+    </select>
+</div>
+        <div style="margin:8px 0;">
+    <label style="font-size:14px;">Split type</label>
+    <select id="splitSelect" onchange="changeSplit(this.value)" class="lang-select">
+    <option value="Equal" id="optEqual">Equal</option>
+    <option value="Percentage" id="optPercentage">Percentage</option>
+    <option value="Exact" id="optExact">Exact Amount</option>
+    <option value="Share" id="optShare">By Shares</option>
+</select>
+</div>
+        <p id="sidebarNotif" onclick="toggleNotifications()">Notifications <span class="float-right">ON</span></p>
+        <p id="sidebarLogout" class="logout-link" onclick="showPage('welcome')">Logout</p>
     </div>
 
+    <!-- PAGE: WELCOME -->
     <div class="page active" id="welcome">
         <div class="circle top"></div>
         <div class="circle bottom"></div>
@@ -32,27 +62,29 @@
         <div class="welcome-text">
             <h1>Hello, User👋</h1>
             <p>Welcome to Equapay</p>
-            <button class="primary-btn start-btn" onclick="showPage('login')">GET STARTED</button>
+            <button class="primary-btn start-btn" onclick="showPage('login')">Get Started</button>
         </div>
     </div>
 
+    <!-- PAGE: LOGIN -->
     <div class="page" id="login">
         <img src="logo.png" class="login-logo">
         <p class="tagline">Manage shared expenses without the stress.</p>
         <div class="tabs">
-            <button class="tab active-tab">Sign In</button>
-            <button class="tab">Sign Up</button>
+            <button class="tab active-tab" onclick="firebaseSignIn()">Sign In</button>
+            <button class="tab" onclick="firebaseSignUp()">Sign Up</button>
         </div>
         <input type="text" placeholder="Email or Phone Number">
         <input type="password" placeholder="Password">
-        <button class="primary-btn" onclick="showPage('dashboard')">Sign In</button>
-        <p class="social-text" style="text-align:center; font-size:12px; margin-top:15px; color:#999;">OR CONTINUE WITH</p>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <button class="tab" style="flex:1; border:1px solid #eee; padding:10px; border-radius:15px;">Google</button>
-            <button class="tab" style="flex:1; border:1px solid #eee; padding:10px; border-radius:15px;">Apple</button>
+        <button class="primary-btn" onclick="firebaseSignIn()">Sign In</button>
+        <p class="or-text">OR CONTINUE WITH</p>
+        <div class="social-btns">
+            <button class="tab social-btn" onclick="googleSignIn()">Google</button>
+            <button class="tab social-btn" onclick="showPage('dashboard')">Apple</button>
         </div>
     </div>
 
+    <!-- PAGE: DASHBOARD -->
     <div class="page" id="dashboard">
         <div class="header">
             <div class="menu-icon" onclick="toggleMenu()">☰</div>
@@ -60,202 +92,78 @@
         </div>
         <input type="text" class="search-bar" placeholder="Search groups...">
         <p class="section-title">Your Groups</p>
-        <div id="groupList">
-            <div class="expense-card" onclick="showPage('apartment')">
-                <div><strong>Apartment Rent</strong><br><small>3 members</small></div>
-                <b class="red">₹4500</b>
-            </div>
+        <div id="groupList"></div>
+        <div id="noGroupsMsg" class="empty-state">
+            <div class="icon">👥</div>
+            <p><b>No groups yet</b></p>
+            <p class="hint">Tap + to create your first group</p>
         </div>
         <button class="fab" onclick="showPage('addGroup')">+</button>
     </div>
 
+    <!-- PAGE: GROUP DETAIL -->
     <div class="page" id="apartment">
         <div class="header row-header">
             <div onclick="showPage('dashboard')" class="back-arrow">←</div>
             <h3 id="groupTitle">Group</h3>
         </div>
-        <div class="chart-container" id="chartMembers">
-            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sidra</strong></div>
-            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Sania</strong></div>
-            <div class="bar-wrapper"><div class="bar" style="height: 100px;"><span>7k</span></div><strong>Hafsa</strong></div>
-        </div>
+        <div class="chart-container" id="chartMembers"></div>
         <div id="resultContainer"></div>
         <button class="fab" onclick="showPage('addExpense')">+</button>
     </div>
 
-    <div class="page" id="addExpense">
-        <div class="header"><div onclick="showPage('apartment')" class="back-arrow">←</div><h3>Add Expense</h3></div>
-        <label class="input-label">Item Name:</label>
-        <input type="text" id="expName" placeholder="e.g. Electricity">
-        <div class="amount-section">
-            <p>Amount</p>
-            <input type="number" id="mainAmount" placeholder="₹ 0.00" class="amount-input">
-        </div>
-        <button class="primary-btn" onclick="calculateSplit()">Confirm Split</button>
+    <!-- PAGE: ADD EXPENSE -->
+<div class="page" id="addExpense">
+    <div class="header">
+        <div onclick="showPage('apartment')" class="back-arrow">←</div>
+        <h3>Add Expense</h3>
+    </div>
+    <label class="input-label" id="itemNameLabel">Item Name:</label>
+    <input type="text" id="expName" placeholder="e.g. Electricity">
+    <button onclick="window.open('receipt-scanner.html','_blank','width=340,height=700')" 
+  style="width:100%; padding:10px; border:2px dashed #2d8cff; border-radius:12px; background:#f0f7ff; color:#2d8cff; font-weight:bold; cursor:pointer; margin-bottom:12px;">
+  📸 Scan Receipt Instead
+</button>
+    <label class="input-label" id="whoPaidLabel">Who Paid?</label>
+    <select id="payerSelect" class="payer-select"></select>
+    <div class="amount-section">
+        <p>Amount</p>
+        <input type="number" id="mainAmount" placeholder="0.00" class="amount-input" oninput="updateSplitFields()">
     </div>
 
+    <label class="input-label" id="splitTypeLabel">Split Type</label>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+        <button id="splitBtnEqual" onclick="selectSplitType('Equal')" style="padding:10px; border-radius:10px; border:2px solid #2d8cff; background:#2d8cff; color:white; font-weight:bold; cursor:pointer;">⚖️ Equal</button>
+        <button id="splitBtnPercentage" onclick="selectSplitType('Percentage')" style="padding:10px; border-radius:10px; border:2px solid #eee; background:white; color:#555; font-weight:bold; cursor:pointer;">📊 Percent</button>
+        <button id="splitBtnExact" onclick="selectSplitType('Exact')" style="padding:10px; border-radius:10px; border:2px solid #eee; background:white; color:#555; font-weight:bold; cursor:pointer;">✏️ Exact</button>
+        <button id="splitBtnShare" onclick="selectSplitType('Share')" style="padding:10px; border-radius:10px; border:2px solid #eee; background:white; color:#555; font-weight:bold; cursor:pointer;">🔢 Shares</button>
+    </div>
+
+    <div id="splitCustomFields" style="display:none; margin-bottom:10px;">
+        <div id="splitInputsContainer"></div>
+        <p id="splitValidMsg" style="font-size:12px; margin-top:4px;"></p>
+    </div>
+
+    <button class="primary-btn" onclick="calculateSplit()">Confirm Split</button>
+</div>
+
+    <!-- PAGE: ADD GROUP -->
     <div class="page" id="addGroup">
-        <div class="header"><div onclick="showPage('dashboard')" class="back-arrow">←</div><h3>New Group</h3></div>
-        
-        <label class="input-label">Group Name:</label>
+        <div class="header">
+            <div onclick="showPage('dashboard')" class="back-arrow">←</div>
+            <h3>New Group</h3>
+        </div>
+        <label class="input-label" id="groupNameLabel">Group Name:</label>
         <input type="text" id="groupInput" placeholder="e.g., Weekend Trip">
-        
-        <label class="input-label">Group Members:</label>
+        <label class="input-label" id="groupMembersLabel">Group Members:</label>
         <input type="text" id="groupMembers" placeholder="Add names (e.g. Sidra, Sania)">
-        
-        <label class="input-label">Description (optional):</label>
+        <label class="input-label" id="groupDescLabel">Description (optional):</label>
         <input type="text" id="groupDesc" placeholder="What is this group for?">
-        
         <button class="primary-btn" onclick="addNewGroup()">Create Group</button>
     </div>
+
 </div>
 
-<script>
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if (document.getElementById('sidebar').classList.contains('open')) toggleMenu();
-    }
-
-    function toggleMenu() {
-        const s = document.getElementById('sidebar');
-        const o = document.getElementById('overlay');
-        s.classList.toggle('open');
-        o.style.display = s.classList.contains('open') ? 'block' : 'none';
-    }
-
-    let currentGroup = null;
-
-function addNewGroup() {
-
-    const groupName = document.getElementById('groupInput').value;
-    const membersInput = document.getElementById('groupMembers').value;
-
-    if (!groupName || !membersInput) {
-        alert("Please enter group name and members");
-        return;
-    }
-
-    const membersArray = membersInput.split(',');
-
-    const list = document.getElementById('groupList');
-
-    const groupData = {
-        name: groupName,
-        members: membersArray
-    };
-
-    list.innerHTML += `
-        <div class="expense-card"
-            onclick='openGroup(${JSON.stringify(groupData)})'>
-
-            <div>
-                <strong>${groupName}</strong><br>
-                <small>${membersArray.length} members</small>
-            </div>
-
-            <b class="green">₹0</b>
-        </div>
-    `;
-
-    document.getElementById('groupInput').value = "";
-    document.getElementById('groupMembers').value = "";
-    document.getElementById('groupDesc').value = "";
-
-    showPage('dashboard');
-}
-function openGroup(group) {
-
-    currentGroup = group;
-
-    document.getElementById('groupTitle').innerText = group.name;
-
-    const chart = document.getElementById('chartMembers');
-
-    chart.innerHTML = "";
-
-    group.members.forEach((member, index) => {
-
-        chart.innerHTML += `
-            <div class="bar" id="bar${index}" style="height:20px;">
-    <span id="amount${index}">0</span>
-</div>
-
-                <strong>${member.trim()}</strong>
-            </div>
-        `;
-    });
-
-    const resultBox = document.getElementById('resultContainer');
-
-    resultBox.innerHTML = "";
-
-    group.members.forEach(member => {
-
-        resultBox.innerHTML += `
-            <div class="expense-card">
-                <span>${member.trim()}</span>
-                <span class="red">₹0</span>
-            </div>
-        `;
-    });
-
-    showPage('apartment');
-}
-
-    function calculateSplit() {
-
-    const amt = document.getElementById('mainAmount').value;
-
-    if (!amt || !currentGroup) return;
-
-    const members = currentGroup.members;
-
-    const perPerson = (amt / members.length).toFixed(2);
-
-    const resultBox = document.getElementById('resultContainer');
-
-    resultBox.innerHTML = "";
-
-    members.forEach((member, index) => {
-
-        if(index === 0) {
-
-            resultBox.innerHTML += `
-                <div class="expense-card">
-                    <span>${member.trim()}</span>
-                    <span class="green">paid ₹${Math.round(amt/1000)}k</span>
-                </div>
-            `;
-
-        } else {
-
-            resultBox.innerHTML += `
-                <div class="expense-card">
-                    <span>${member.trim()}</span>
-                    <span class="red">owes ₹${Math.round(perPerson/1000)}k</span>
-                </div>
-            `;
-        }
-    });
-members.forEach((member, index) => {
-
-    let value;
-
-    if(index === 0){
-        value = amt;
-    } else {
-        value = perPerson;
-    }
-
-    document.getElementById(`bar${index}`).style.height =
-        (value / 150) + "px";
-
-    document.getElementById(`amount${index}`).innerText =
-        "₹" + Math.round(value/1000) + "k"
-});
-    showPage('apartment');
-}
-</script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
